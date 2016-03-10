@@ -1,5 +1,7 @@
 package com.example.visadeveloper.api;
 
+import org.json.JSONObject;
+
 import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.Body;
@@ -15,4 +17,10 @@ public interface MvisaApi  {
 
     @POST("/mvisa/v1/cashinpushpayments")
     void debit(@Body TypedInput in, Callback<Response> responseCallback);
+
+
+    @POST("/mvisa/v1/cashoutpushpayments")
+    void push(@Body TypedInput in, Callback<Response> responseCallback);
+
+
 }
