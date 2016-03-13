@@ -1,6 +1,7 @@
 package com.example.visadeveloper.Generator;
 
 import android.content.Context;
+//import android.util.Base64;
 import android.util.Log;
 
 import com.example.visadeveloper.DemoApplication;
