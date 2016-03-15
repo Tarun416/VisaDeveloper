@@ -1,5 +1,6 @@
 package com.example.visadeveloper;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.visadeveloper.Generator.ApiGenerator;
@@ -35,6 +37,8 @@ import retrofit.mime.TypedInput;
 
 public class MainActivity extends AppCompatActivity {
 
+    ProgressDialog csprogress;
+
     Button b;
     MvisaApi mvisaApi;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -43,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        csprogress=new ProgressDialog(this);
+        csprogress.setMessage("Please wait");
+        csprogress.setCancelable(false);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     final EditText amount=(EditText) findViewById(R.id.amt);
         final EditText merchantid=(EditText) findViewById(R.id.merid);
@@ -65,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+
+                csprogress.show();
 
                 if(!TextUtils.isEmpty(senderac.getText().toString())&&!TextUtils.isEmpty(merchantid.getText().toString())&&!TextUtils.isEmpty(amount.getText().toString()) ) {
 
@@ -198,19 +212,23 @@ public class MainActivity extends AppCompatActivity {
 
                         try {
 
-                            String json = "{ \"retrievalReferenceNumber\":\"430000367618\",\"secondaryId\":\"\",\"recipientName\":\"Aka\",\"acquirerCountryCode\":\"643\",\"transactionFeeAmt\":\"10\",\"acquiringBin\":\"400171\",\"amount\":\"10\",\"businessApplicationId\":\"CI\",\"cardAcceptor\":{\"name\":\"Card Accpector ABC\",\"idCode\":\"ID-Code123\",\"address\":{\"city\":\"Bangalore\",\"country\":\"IND\",\"state\":\"Karnataka\"}},\"localTransactionDateTime\":\"2016-03-13T11:40:52\",\"merchantCategoryCode\":\"4829\",\"recipientPrimaryAccountNumber\":\"4123640062698797\",\"senderAccountNumber\":\"4541237895236\",\"senderName\":\"Mohammed Qasim\",\"senderReference\":\"1234\",\"systemsTraceAuditNumber\":\"313042\",\"transactionCurrencyCode\":\"USD\",\"transactionIdentifier\":\"381228649430015\"}";
+                            String json = "{ \"retrievalReferenceNumber\":\"430000367618\",\"secondaryId\":\"\",\"recipientName\":\"Aka\",\"acquirerCountryCode\":\"643\",\"transactionFeeAmt\":\"10\",\"acquiringBin\":\"400171\",\"amount\":\"10\",\"businessApplicationId\":\"CI\",\"cardAcceptor\":{\"name\":\"Card Accpector ABC\",\"idCode\":\"ID-Code123\",\"address\":{\"city\":\"Bangalore\",\"country\":\"IND\",\"state\":\"Karnataka\"}},\"localTransactionDateTime\":\"2016-03-14T11:40:52\",\"merchantCategoryCode\":\"4829\",\"recipientPrimaryAccountNumber\":\"4123640062698797\",\"senderAccountNumber\":\"4541237895236\",\"senderName\":\"Mohammed Qasim\",\"senderReference\":\"1234\",\"systemsTraceAuditNumber\":\"313042\",\"transactionCurrencyCode\":\"USD\",\"transactionIdentifier\":\"381228649430015\"}";
 
-                            String json1 = "{ \"retrievalReferenceNumber\":\"430000367618\",\"secondaryId\":\"\",\"recipientName\":\"Aka\",\"acquirerCountryCode\":\"643\",\"transactionFeeAmt\":\"10\",\"acquiringBin\":\"400171\",\"amount\":\"10\",\"businessApplicationId\":\"CO\",\"cardAcceptor\":{\"name\":\"Card Accpector ABC\",\"idCode\":\"ID-Code123\",\"address\":{\"city\":\"Bangalore\",\"country\":\"IND\",\"state\":\"Karnataka\"}},\"localTransactionDateTime\":\"2016-03-13T11:40:52\",\"merchantCategoryCode\":\"4829\",\"recipientPrimaryAccountNumber\":\"4123640062698797\",\"senderAccountNumber\":\"4541237895236\",\"senderName\":\"Mohammed Qasim\",\"senderReference\":\"1234\",\"systemsTraceAuditNumber\":\"313042\",\"transactionCurrencyCode\":\"USD\",\"transactionIdentifier\":\"381228649430015\"}";
+                            String json1 = "{ \"retrievalReferenceNumber\":\"430000367618\",\"secondaryId\":\"\",\"recipientName\":\"Aka\",\"acquirerCountryCode\":\"643\",\"transactionFeeAmt\":\"10\",\"acquiringBin\":\"400171\",\"amount\":\"10\",\"businessApplicationId\":\"CO\",\"cardAcceptor\":{\"name\":\"Card Accpector ABC\",\"idCode\":\"ID-Code123\",\"address\":{\"city\":\"Bangalore\",\"country\":\"IND\",\"state\":\"Karnataka\"}},\"localTransactionDateTime\":\"2016-03-14T11:40:52\",\"merchantCategoryCode\":\"4829\",\"recipientPrimaryAccountNumber\":\"4123640062698797\",\"senderAccountNumber\":\"4541237895236\",\"senderName\":\"Mohammed Qasim\",\"senderReference\":\"1234\",\"systemsTraceAuditNumber\":\"313042\",\"transactionCurrencyCode\":\"USD\",\"transactionIdentifier\":\"381228649430015\"}";
                             //  String json{
                             final TypedInput in1 = new TypedByteArray("application/json", json1.getBytes("UTF-8"));
                             final TypedInput in = new TypedByteArray("application/json", json.getBytes("UTF-8"));
                             mvisaApi.debit(in, new Callback<Response>() {
+
+
                                 @Override
                                 public void success(Response response1, Response response) {
+
+
                                     Logger.d("ss", response1.toString());
                                     JSONObject responseJson = new JSONObject();
                                     try {
-                                        responseJson = new JSONObject(new String(((TypedByteArray) response.getBody()).getBytes()));
+                                        responseJson = new JSONObject(new String(((TypedByteArray) response1.getBody()).getBytes()));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -219,11 +237,12 @@ public class MainActivity extends AppCompatActivity {
                                     mvisaApi.push(in1, new Callback<Response>() {
                                         @Override
                                         public void success(Response response, Response response2) {
-
+                                            csprogress.hide();
 
 
                                             Logger.d("dd", response.toString());
                                             Intent i=new Intent(getApplicationContext(),SendActivity.class);
+                                            i.putExtra("amt",amount.getText().toString());
                                             startActivity(i);
 
 
@@ -231,6 +250,8 @@ public class MainActivity extends AppCompatActivity {
 
                                         @Override
                                         public void failure(RetrofitError error) {
+
+                                            csprogress.hide();
 
                                         }
                                     });
@@ -240,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void failure(RetrofitError error) {
+                                    csprogress.hide();
 
                                     Logger.d("error", error.getMessage());
 
@@ -256,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    csprogress.hide();
                     Toast.makeText(getApplicationContext(), "Please enter all the details", Toast.LENGTH_LONG).show();
                 }
 

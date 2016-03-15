@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_below="@+id/amt"
         android:layout_centerHorizontal="true"
-        android:text="To : Maria"
+        android:text="To : Card Acceptor ABC"
         android:layout_marginTop="16dp"
         android:layout_height="wrap_content" />
 

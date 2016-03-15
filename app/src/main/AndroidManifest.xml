@@ -56,6 +56,15 @@
             android:exported="false">
         </service>
 
+        <service
+            android:name="com.example.visadeveloper.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+
 
     </application>
 
