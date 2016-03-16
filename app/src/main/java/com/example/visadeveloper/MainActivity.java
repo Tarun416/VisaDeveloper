@@ -1,5 +1,8 @@
 package com.example.visadeveloper;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,11 +40,40 @@ import retrofit.mime.TypedInput;
 
 public class MainActivity extends AppCompatActivity {
 
+     EditText merchantid;
+
     ProgressDialog csprogress;
 
     Button b;
+    Button scan;
     MvisaApi mvisaApi;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+   /* @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+
+        if (scanningResult != null) {
+
+            String content=scanningResult.getContents();
+
+            merchantid.setText(content);
+
+
+
+
+//we have a result
+        }
+
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +85,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    final EditText amount=(EditText) findViewById(R.id.amt);
-        final EditText merchantid=(EditText) findViewById(R.id.merid);
+        final EditText amount=(EditText) findViewById(R.id.amt);
+         merchantid=(EditText) findViewById(R.id.merid);
         final EditText senderac=(EditText) findViewById(R.id.start1);
+       scan=(Button) findViewById(R.id.scan);
         setSupportActionBar(toolbar);
         Logger.init("Tag").setMethodCount(3);
 
@@ -67,6 +100,28 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
+
+                scanIntegrator.initiateScan();
+
+
+            }
+        });
+
+
+
+
+
+
+
 
        b= (Button)findViewById(R.id.confirm);
 
@@ -326,5 +381,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null) {
+            String re = scanResult.getContents();
+            Log.d("code", re);
+            merchantid.setText(re);
+        }
+
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        // else continue with any other code you need in the method
+
     }
 }

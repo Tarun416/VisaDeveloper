@@ -140,6 +140,26 @@
 
 
 
+   <TextView
+       android:id="@+id/qr"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Pay using QR code"
+       android:layout_below="@+id/confirm"
+       android:textSize="20dp"
+       android:layout_marginTop="19dp" />
+
+
+
+    <Button
+        android:id="@+id/scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan"
+        android:layout_below="@id/qr"/>
+
+
+
 
 
 
